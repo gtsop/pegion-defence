@@ -2,6 +2,20 @@
 
 This project will contain all the digital assets required to setup and operate an automatic water/laser turret against pegions to defend some physical area
 
+## Webpam preview
+
+If you don't have a webcam, run a fake webcam feed:
+
+```
+./scripts/fake-webcam.sh
+```
+
+Then run the python script
+
+```
+uv run python webcam-feed.py
+```
+
 ## Plan
 
 ### Phase 1 - Image recognition
