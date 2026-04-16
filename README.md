@@ -4,17 +4,6 @@ This project will contain all the digital assets required to setup and operate a
 
 ## Plan
 
-### Phase 0
-
-This phase is for theoretically planning how to accomplish the following tasks so that we can move on to other phases
-
-0. Figure out the target device hardware operating the edge node (camera, weapon). For now let's say it's a RPI
-1. Figure out image/video streaming from a low-powered device such as an rpi
-2. Figure out image recognition to detect pegions in particular
-3. Figure out how to shoot water using electrical actuators controlled by rpi
-4. Figure out how to shoot lazer "" ""
-5. Figure out how to aim the weapon
-
 ### Phase 1 - Image recognition
 
 Deliverables: A desktop application that can detect a pegion in a static image
