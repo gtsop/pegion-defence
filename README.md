@@ -16,9 +16,15 @@ Then run the python script
 uv run python webcam-feed.py
 ```
 
+## Webcam pegion detection
+
+```
+uv run python detection.py
+```
+
 ## Plan
 
-### Phase 1 - Image recognition
+### Phase 1 - Image recognition - DELIVERED
 
 Deliverables: A desktop application that can detect a pegion in a static image
 
@@ -26,7 +32,7 @@ Goals:
 
 - Gain understanding regarding the technology involved in image recognition of pegions
 
-### Phase 2 - Video recognition
+### Phase 2 - Video recognition - DELIVERED
 
 Deliverables: A desktop application that can detect a pegion in a video playback
 
