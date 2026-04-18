@@ -58,8 +58,18 @@ else:
     print("\t", "Press ESC to exit")
     print("")
 
+results = None
+frame_id = 0
 while True:
     _, frame = cap.read()
+
+    frame_id = (frame_id + 1) % 2
+
+    if DETECTION_ON and frame_id == 0:
+        results = model(frame)[0]
+
+    if results:
+        utils.draw_bboxes(model, frame, results)
 
     cv2.imshow("Frame", frame)
     key = cv2.waitKey(1)

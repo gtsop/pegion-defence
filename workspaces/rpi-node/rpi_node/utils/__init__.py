@@ -2,7 +2,7 @@ import cv2
 from linuxpy.video.device import iter_video_capture_devices
 
 
-def draw_bboxes(frame, results):
+def draw_bboxes(model, frame, results):
     for box in results.boxes:
         x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
         conf = float(box.conf[0])
