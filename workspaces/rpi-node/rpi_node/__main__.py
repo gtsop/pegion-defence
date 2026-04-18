@@ -1,5 +1,6 @@
 #from common.utils import get_webcams
 import argparse
+import signal
 import sys
 
 import cv2
@@ -7,10 +8,16 @@ from ultralytics import YOLO
 
 import utils
 
+running = True
+
+def handle_signal(a, b):
+    running = False
+
 def parse_cli_args():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--mode", default="preview")
+    parser.add_argument("--detect", default="on")
+    parser.add_argument("--preview", default="off")
 
     args = parser.parse_args()
 
@@ -22,10 +29,12 @@ print("================")
 print("=== RPI NODE ===")
 print("================")
 print("")
-print("-> Mode:", args.mode)
+print("- Detect:", args.detect)
+print("- Preview:", args.preview)
 print("")
 
-DETECTION_ON = args.mode == "detect"
+DETECTION_ON = args.detect == "on"
+PREVIEW_ON = args.preview == "on"
 model = ''
 
 if DETECTION_ON:
@@ -60,24 +69,31 @@ else:
 
 results = None
 frame_id = 0
-while True:
-    _, frame = cap.read()
 
-    frame_id = (frame_id + 1) % 2
+try:
+    signal.signal(signal.SIGINT, handle_signal)
+    signal.signal(signal.SIGTERM, handle_signal)
 
-    if DETECTION_ON and frame_id == 0:
-        results = model(frame)[0]
+    while running:
+        ret, frame = cap.read()
 
-    if results:
-        utils.draw_bboxes(model, frame, results)
+        if not ret:
+            print("Camera stream stopped, exiting...")
+            break
 
-    cv2.imshow("Frame", frame)
-    key = cv2.waitKey(1)
+        frame_id = (frame_id + 1) % 2
 
-    if key == 27:
-        break
+        if DETECTION_ON and frame_id == 0:
+            results = model(frame)[0]
 
-cap.release()
-cv2.destroyAllWindows()
+        if PREVIEW_ON and results:
+            utils.draw_bboxes(model, frame, results)
+            cv2.imshow("Frame", frame)
+            key = cv2.waitKey(1)
+            if key == 27:
+                break
+finally:
+    cap.release()
+    cv2.destroyAllWindows()
 
 
