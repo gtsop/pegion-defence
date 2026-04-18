@@ -1,5 +1,6 @@
 import cv2
-import linuxpy.video.device
+from linuxpy.video.device import iter_video_capture_devices
+
 
 def draw_bboxes(frame, results):
     for box in results.boxes:
@@ -15,16 +16,16 @@ def draw_bboxes(frame, results):
 def get_webcams():
     webcams = []
 
-    for path in Device.iter_devices():
-        device = Device(path)
+    for device in iter_video_capture_devices():
 
-        caps = dev.capabilities
+        with device:
+            caps = dir(device.info.capabilities)
 
-        if caps.meta_caputre:
-            continue
+            if "META_CAPUTRE" in caps:
+                continue
 
-        if caps.video_caputre or caps.video_capture_mplane:
-            webcams.append(path)
+            if "VIDEO_CAPTURE" in caps or "VIDEO_CAPTURE_MPLANE" in caps:
+                webcams.append(device)
 
     return webcams
 
