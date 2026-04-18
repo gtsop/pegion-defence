@@ -3,6 +3,7 @@ import argparse
 import sys
 
 import cv2
+from ultralytics import YOLO
 
 import utils
 
@@ -29,7 +30,8 @@ model = ''
 
 if DETECTION_ON:
     print("-> Initializing model")
-    #model = YOLO("yolov8n.pt")
+    model = YOLO("yolov8n_ncnn_model", task="detect")
+    print("")
 
 print("-> Listing available cameras")
 
