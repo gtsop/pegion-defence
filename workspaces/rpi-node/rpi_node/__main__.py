@@ -6,9 +6,6 @@ import cv2
 
 import utils
 
-
-MODE="preview"
-
 def parse_cli_args():
     parser = argparse.ArgumentParser()
 
@@ -16,14 +13,23 @@ def parse_cli_args():
 
     args = parser.parse_args()
 
-    MODE = args.mode
+    return args
 
-parse_cli_args()
+args = parse_cli_args()
 
-print("======================")
-print("=== Camera preview ===")
-print("======================")
+print("================")
+print("=== RPI NODE ===")
+print("================")
 print("")
+print("-> Mode:", args.mode)
+print("")
+
+DETECTION_ON = args.mode == "detect"
+model = ''
+
+if DETECTION_ON:
+    print("-> Initializing model")
+    #model = YOLO("yolov8n.pt")
 
 print("-> Listing available cameras")
 
