@@ -21,9 +21,6 @@ def get_webcams():
         with device:
             caps = dir(device.info.capabilities)
 
-            if "META_CAPUTRE" in caps:
-                continue
-
             if "VIDEO_CAPTURE" in caps or "VIDEO_CAPTURE_MPLANE" in caps:
                 webcams.append(device)
 
