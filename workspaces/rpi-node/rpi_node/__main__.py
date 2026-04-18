@@ -1,10 +1,24 @@
 #from common.utils import get_webcams
+import argparse
 import sys
 
 import cv2
 
 import utils
 
+
+MODE="preview"
+
+def parse_cli_args():
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--mode", default="preview")
+
+    args = parser.parse_args()
+
+    MODE = args.mode
+
+parse_cli_args()
 
 print("======================")
 print("=== Camera preview ===")
