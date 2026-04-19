@@ -26,3 +26,28 @@ def get_webcams():
 
     return webcams
 
+def get_objects(object_name, model, results):
+    objects = []
+
+    for box in results.boxes:
+        name = model.names[int(box.cls[0])]
+
+        if name == object_name:
+            objects.append(box)
+
+    return objects
+
+# Compatibility check for running the same code on non-Rpi devices
+detection_pin = 23
+try:
+    import RPi.GPIO as GPIO
+
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(detection_pin, GPIO.OUT)
+
+    def set_led(on):
+        GPIO.output(detection_pin, GPIO.HIGH if on else GPIO.LOW)
+
+except:
+    def set_led(on):
+        print(f"Turning LED {'ON' if on else 'OFF'}") 

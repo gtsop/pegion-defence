@@ -17,6 +17,7 @@ def parse_cli_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--detect", default="on")
+    parser.add_argument("--detect-target", default="bird")
     parser.add_argument("--preview", default="off")
 
     args = parser.parse_args()
@@ -30,6 +31,7 @@ print("=== RPI NODE ===")
 print("================")
 print("")
 print("- Detect:", args.detect)
+print("- Detect Target:", args.detect_target)
 print("- Preview:", args.preview)
 print("")
 
@@ -86,7 +88,11 @@ try:
         if DETECTION_ON and frame_id == 0:
             results = model(frame)[0]
 
-        if PREVIEW_ON and results:
+        if results:
+            birds = utils.get_objects(args.detect_target, model, results)
+            utils.set_led(bool(birds))
+
+        if results and PREVIEW_ON:
             utils.draw_bboxes(model, frame, results)
             cv2.imshow("Frame", frame)
             key = cv2.waitKey(1)
