@@ -10,6 +10,8 @@ import utils
 running = True
 
 def handle_signal(a, b):
+    global running
+
     utils.set_led(False)
     running = False
 
