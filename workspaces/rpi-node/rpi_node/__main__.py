@@ -11,6 +11,7 @@ import utils
 running = True
 
 def handle_signal(a, b):
+    utils.set_led(False)
     running = False
 
 def parse_cli_args():
@@ -99,6 +100,7 @@ try:
             if key == 27:
                 break
 finally:
+    utils.set_led(False)
     cap.release()
     cv2.destroyAllWindows()
 

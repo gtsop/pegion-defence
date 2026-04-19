@@ -8,6 +8,7 @@ dependencies = [
     "linuxpy>=0.24.0",
     "ncnn>=1.0.20260114",
     "opencv-python>=4.13.0.92",
+    "rpi-gpio>=0.7.1",
     "ultralytics>=8.4.39",
 ]
 

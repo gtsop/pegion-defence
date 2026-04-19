@@ -1237,6 +1237,12 @@ wheels = [
 ]
 
 [[package]]
+name = "rpi-gpio"
+version = "0.7.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/c4/0f/10b524a12b3445af1c607c27b2f5ed122ef55756e29942900e5c950735f2/RPi.GPIO-0.7.1.tar.gz", hash = "sha256:cd61c4b03c37b62bba4a5acfea9862749c33c618e0295e7e90aa4713fb373b70", size = 29090, upload-time = "2022-02-06T15:15:06.022Z" }
+
+[[package]]
 name = "rpi-node"
 version = "0.1.0"
 source = { virtual = "." }
@@ -1244,6 +1250,7 @@ dependencies = [
     { name = "linuxpy" },
     { name = "ncnn" },
     { name = "opencv-python" },
+    { name = "rpi-gpio" },
     { name = "ultralytics" },
 ]
 
@@ -1252,6 +1259,7 @@ requires-dist = [
     { name = "linuxpy", specifier = ">=0.24.0" },
     { name = "ncnn", specifier = ">=1.0.20260114" },
     { name = "opencv-python", specifier = ">=4.13.0.92" },
+    { name = "rpi-gpio", specifier = ">=0.7.1" },
     { name = "ultralytics", specifier = ">=8.4.39" },
 ]
 
