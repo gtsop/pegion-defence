@@ -5,6 +5,7 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "fastapi[standard]>=0.136.0",
     "linuxpy>=0.24.0",
     "ncnn>=1.0.20260114",
     "opencv-python>=4.13.0.92",
@@ -12,3 +13,5 @@ dependencies = [
     "ultralytics>=8.4.39",
 ]
 
+[tool.fastapi]
+entrypoint = "rpi_node.api:app"

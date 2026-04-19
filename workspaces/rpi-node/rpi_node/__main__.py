@@ -1,4 +1,3 @@
-#from common.utils import get_webcams
 import argparse
 import signal
 import sys
