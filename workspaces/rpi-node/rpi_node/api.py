@@ -6,7 +6,6 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-pd_proc = None
 
 @app.get("/status")
 async def root():
@@ -21,11 +20,8 @@ async def root():
 async def start():
     global pd_proc
 
-    if pd_proc:
-        return { "error": "Process already started" }
-
     pd_proc = subprocess.Popen(
-        ["uv", "run", "rpi_node"],
+        ["systemcl", "start", "rpi-node"],
         start_new_session=True
     )
 
@@ -33,17 +29,9 @@ async def start():
     
 @app.post("/stop")
 async def stop():
-    global pd_proc
-
-    if not pd_proc:
-        return { "message": "ok" }
-
-    if pd_proc.poll() is None:
-        pd_proc.terminate()
-
-    time.sleep(2)
-
-    if pd_proc.poll() is None:
-        pd_proc.kill()
+    pd_proc = subprocess.Popen(
+        ["systemcl", "stop", "rpi-node"],
+        start_new_session=True
+    )
 
     return { "message": "ok" }

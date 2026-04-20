@@ -1,0 +1,5 @@
+[Unit]
+Description=Pegion Defence RPi 4 Node API server
+
+[Service]
+ExecStart=RPI_NODE_API_BIN
