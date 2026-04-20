@@ -21,7 +21,7 @@ def get_webcams():
         with device:
             caps = dir(device.info.capabilities)
 
-            if "bcm2845" in device.filename:
+            if "bcm2835" in str(device.info.card):
                 continue
 
             if "VIDEO_CAPTURE" in caps or "VIDEO_CAPTURE_MPLANE" in caps:
