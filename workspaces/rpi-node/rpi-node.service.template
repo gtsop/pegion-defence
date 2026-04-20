@@ -3,3 +3,6 @@ Description=Pegion Defence RPi 4 Node service
 
 [Service]
 ExecStart=RPI_NODE_BIN
+
+[Install]
+WantedBy=multi-user.target

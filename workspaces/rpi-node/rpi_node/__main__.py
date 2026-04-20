@@ -93,6 +93,8 @@ try:
         if results:
             birds = utils.get_objects(args.detect_target, model, results)
             utils.set_led(bool(birds))
+        else:
+            utils.set_led(False)
 
         if results and PREVIEW_ON:
             utils.draw_bboxes(model, frame, results)
