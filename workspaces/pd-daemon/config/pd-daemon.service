@@ -1,0 +1,8 @@
+[Unit]
+Description=Pegion Defence RPi 4 daemon
+
+[Service]
+ExecStart=/usr/local/bin/pd-daemon
+
+[Install]
+WantedBy=multi-user.target
