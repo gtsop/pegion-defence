@@ -1,0 +1,11 @@
+[project]
+name = "pd-api"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi[standard]>=0.136.1",
+    "pyinstaller>=6.20.0",
+    "uvicorn>=0.46.0",
+]

@@ -2,8 +2,66 @@
 <html>
   <head>
     <title>Pegion Defence</title>
+    <style>
+      #pd-daemon-status-area {
+        width: 90%;
+        height: 50vh;
+        margin-top: 10px;
+      }
+    </style>
   </head>
   <body>
     <h1>Pegion Defence</h1>
+    <main>
+      <p>pd-daemon</p>
+      <div>
+        <button id="pd-daemon-status">Status</button>
+        <button id="pd-daemon-start">Start</button>
+        <button id="pd-daemon-stop">Stop</button>
+        <button id="pd-daemon-kill">Kill</button>
+      </div>
+      <textarea id="pd-daemon-status-area" disabled> </textarea>
+    </main>
+    <script>
+      const API_URL = "http://localhost:8000";
+
+      function post(url, body) {
+        return fetch(API_URL + url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body,
+        });
+      }
+      document
+        .querySelector("#pd-daemon-start")
+        .addEventListener("click", () => {
+          console.log("start");
+          post("/start");
+        });
+      document
+        .querySelector("#pd-daemon-stop")
+        .addEventListener("click", () => {
+          console.log("stop");
+          post("/stop");
+        });
+      document
+        .querySelector("#pd-daemon-kill")
+        .addEventListener("click", () => {
+          console.log("kill");
+          post("/kill");
+        });
+      document
+        .querySelector("#pd-daemon-status")
+        .addEventListener("click", () => {
+          console.log("status");
+          post("/status").then(async (resp) => {
+            const result = await resp.json();
+            document.querySelector("#pd-daemon-status-area").textContent =
+              result.stdout;
+          });
+        });
+    </script>
   </body>
 </html>

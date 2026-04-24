@@ -1,0 +1,10 @@
+[Unit]
+Description=Pegion Defence RPi 4 API
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/pd-api
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
