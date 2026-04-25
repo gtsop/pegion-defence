@@ -21,10 +21,10 @@
         <button id="pd-daemon-kill">Kill</button>
       </div>
       <textarea id="pd-daemon-status-area" disabled> </textarea>
-      <img src="http://localhost:8000/video" />
+      <img id="pd-daemon-video" />
     </main>
     <script>
-      const API_URL = "http://localhost:8000";
+      const API_URL = "http://" + window.location.hostname + ":8000";
 
       function post(url, body) {
         return fetch(API_URL + url, {
@@ -35,6 +35,7 @@
           body,
         });
       }
+      document.querySelector("#pd-daemon-video").src = API_URL + "/video";
       document
         .querySelector("#pd-daemon-start")
         .addEventListener("click", () => {
