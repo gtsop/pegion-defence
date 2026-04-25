@@ -5,7 +5,7 @@ a = Analysis(
     ['pd_api/main.py'],
     pathex=[],
     binaries=[],
-    datas=[],
+    datas=[("static/no-video.jpg", "static")],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

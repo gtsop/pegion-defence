@@ -59,8 +59,9 @@ def stream_frames():
             pass
         time.sleep(1/15)
 
+BASE_DIR = Path(__file__).resolve().parent
+PLACEHOLDER_PATH = BASE_DIR / "static" / "no-video.jpg"
 FRAME_PATH = Path("/run/pigeon-defence/frame.jpg")
-PLACEHOLDER = Path("static/no-video.jpg").read_bytes()
 
 def get_frame():
     try:
