@@ -2,6 +2,7 @@ import argparse
 import os
 import signal
 import sys
+import time
 
 import cv2
 from ultralytics import YOLO
@@ -107,13 +108,16 @@ def main():
             if results:
                 utils.draw_bboxes(model, frame, results)
 
+            utils.draw_fps(frame)
+            utils.draw_datetime(frame)
+
             ok, encoded = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
             if ok:
                 with open(TMP_PATH, "wb") as file:
                     file.write(encoded.tobytes())
                 os.replace(TMP_PATH, FRAME_PATH)
 
-            if results and PREVIEW_ON:
+            if PREVIEW_ON:
                 cv2.imshow("Frame", frame)
                 key = cv2.waitKey(1)
                 if key == 27:

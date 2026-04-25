@@ -1,4 +1,3 @@
-- Print datetime on video feed
 - Extract the inference process onto another program
 - figure out recording of the video
 - figure out infrared camera

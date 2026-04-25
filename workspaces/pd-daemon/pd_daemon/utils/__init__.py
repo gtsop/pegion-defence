@@ -1,3 +1,6 @@
+import datetime
+import time
+
 import cv2
 from linuxpy.video.device import iter_video_capture_devices
 
@@ -38,6 +41,39 @@ def get_objects(object_name, model, results):
             objects.append(box)
 
     return objects
+
+def now():
+    return time.perf_counter() * 1000
+
+fps_last_frame_time = now()
+fps_frame_count = 0
+fps = 0
+
+def draw_fps(frame):
+    global fps_last_frame_time
+    global fps_frame_count
+    global fps
+
+    frame_time = now()
+    fps_frame_count += 1
+
+    ms_since_last_frame = frame_time - fps_last_frame_time
+
+    if ms_since_last_frame >= 1000:
+        fps = int(fps_frame_count / (ms_since_last_frame / 1000))
+        fps_last_frame_time = frame_time
+        fps_frame_count = 0
+
+    cv2.rectangle(frame, (10, 20), (75, 30), (0,0,0), -1)
+    cv2.putText(frame, f"FPS: {fps}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, .5, (140, 140, 140), 1, cv2.LINE_AA)
+
+def draw_datetime(frame):
+    height, width = frame.shape[:2]
+    print(width, height)
+
+    date_string = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S") 
+    cv2.rectangle(frame, (width - 180, height - 20), (width - 20, height), (0,0,0), -1)
+    cv2.putText(frame, date_string, (width - 180, height -5), cv2.FONT_HERSHEY_SIMPLEX, .5, (140, 140, 140), 1, cv2.LINE_AA)
 
 # Compatibility check for running the same code on non-Rpi devices
 detection_pin = 23
