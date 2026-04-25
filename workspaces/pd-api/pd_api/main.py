@@ -1,8 +1,11 @@
+from pathlib import Path
 import subprocess
+import time
 
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import StreamingResponse
 
 app = FastAPI()
 
@@ -33,7 +36,39 @@ async def kill():
 async def status():
     return systemctl("status", "pd-daemon")
 
-    
+@app.get("/video")
+async def video():
+    return StreamingResponse(
+        stream_frames(),
+        media_type="multipart/x-mixed-replace; boundary=frame",
+    )
+
+
+def stream_frames():
+    last_frame = None
+
+    while True:
+        try:
+            frame = get_frame()
+
+            yield (
+                b"--frame\r\n"
+                b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
+            )
+        except FileNotFoundError:
+            pass
+        time.sleep(1/15)
+
+FRAME_PATH = Path("/run/pigeon-defence/frame.jpg")
+PLACEHOLDER = Path("static/no-video.jpg").read_bytes()
+
+def get_frame():
+    try:
+        if not FRAME_PATH.exists():
+            return PLACEHOLDER
+        return FRAME_PATH.read_bytes()
+    except Exception:
+        return PLACEHOLDER
 
 def systemctl(action, service):
     result = subprocess.run(
