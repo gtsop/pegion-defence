@@ -3,4 +3,4 @@
 SCRIPT_DIR="$(dirname -- "$(readlink -f -- "${BASH_SOURCE[0]}")")"
 cd $SCRIPT_DIR/../
 
-./dist/pd-daemon/pd-daemon $@ --detect-target person
+./dist/pd-daemon/pd-daemon $@
