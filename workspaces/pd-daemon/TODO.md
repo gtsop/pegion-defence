@@ -1,0 +1,5 @@
+- Print datetime on video feed
+- Extract the inference process onto another program
+- figure out recording of the video
+- figure out infrared camera
+- figure out how to extend the reach of the camera and how to enclose it
