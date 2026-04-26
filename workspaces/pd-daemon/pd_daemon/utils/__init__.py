@@ -64,16 +64,16 @@ def draw_fps(frame):
         fps_last_frame_time = frame_time
         fps_frame_count = 0
 
-    cv2.rectangle(frame, (10, 20), (75, 30), (0,0,0), -1)
-    cv2.putText(frame, f"FPS: {fps}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, .5, (140, 140, 140), 1, cv2.LINE_AA)
+    height, width = frame.shape[:2]
+    cv2.rectangle(frame, (0, height - 20), (65, height), (0,0,0), -1)
+    cv2.putText(frame, f"FPS: {fps}", (0, height - 5), cv2.FONT_HERSHEY_SIMPLEX, .5, (140, 140, 140), 1, cv2.LINE_AA)
 
 def draw_datetime(frame):
     height, width = frame.shape[:2]
-    print(width, height)
 
     date_string = datetime.datetime.now().strftime("%d-%m-%Y %H:%M:%S") 
-    cv2.rectangle(frame, (width - 180, height - 20), (width - 20, height), (0,0,0), -1)
-    cv2.putText(frame, date_string, (width - 180, height -5), cv2.FONT_HERSHEY_SIMPLEX, .5, (140, 140, 140), 1, cv2.LINE_AA)
+    cv2.rectangle(frame, (width - 185, height - 20), (width, height), (0,0,0), -1)
+    cv2.putText(frame, date_string, (width - 185, height -5), cv2.FONT_HERSHEY_SIMPLEX, .5, (140, 140, 140), 1, cv2.LINE_AA)
 
 # Compatibility check for running the same code on non-Rpi devices
 detection_pin = 23
