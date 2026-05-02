@@ -1,0 +1,32 @@
+[project]
+name = "pd-node"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi[standard]>=0.136.1",
+    "linuxpy>=0.24.0",
+    "ncnn>=1.0.20260114",
+    "opencv-python>=4.13.0.92",
+    "pnnx>=20260409",
+    "pyinstaller>=6.20.0",
+    "ultralytics>=8.4.45",
+    "uvicorn>=0.46.0",
+]
+
+[tool.uv.workspace]
+members = [
+    ".",
+]
+
+[tool.uv.sources]
+pd-node = { workspace = true, editable = true }
+
+[tool.setuptools.packages.find]
+include = ["pd_node*"]
+
+[dependency-groups]
+dev = [
+    "pd-node",
+]
