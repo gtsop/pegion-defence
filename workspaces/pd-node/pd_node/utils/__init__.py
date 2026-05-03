@@ -93,8 +93,27 @@ detection_pin = 23
 try:
     import RPi.GPIO as GPIO
 
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(detection_pin, GPIO.OUT)
+    PIN = 37
+
+    MIN_DUTY = 1.8
+    MAX_DUTY = 13.05
+
+    app = FastAPI()
+
+    # ---- servo setup (global) ----
+    GPIO.setmode(GPIO.BOARD)
+    GPIO.setup(PIN, GPIO.OUT)
+
+    pwm = GPIO.PWM(PIN, 50)
+    pwm.start(0)
+
+    def set_angle(angle: float):
+        angle = max(0, min(100, angle))
+        duty = MIN_DUTY + (angle / 100.0) * (MAX_DUTY - MIN_DUTY)
+
+        pwm.ChangeDutyCycle(duty)
+        time.sleep(0.4)
+        pwm.ChangeDutyCycle(0)
 
     def set_led(on):
         GPIO.output(detection_pin, GPIO.HIGH if on else GPIO.LOW)
@@ -102,4 +121,9 @@ try:
 except:
     def set_led(on):
         print(f"Turning LED {'ON' if on else 'OFF'}") 
+
+    def set_angle(angle: float):
+        print(f"Setting angle {angle}")
+
+
 

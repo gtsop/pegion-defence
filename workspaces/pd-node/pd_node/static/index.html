@@ -59,6 +59,10 @@
       <table id="videos">
         <tbody></tbody>
       </table>
+
+      <div>
+        <input id="angle" />
+      </div>
     </main>
     <script>
       const API_URL = "http://" + window.location.hostname + ":8000";
@@ -69,7 +73,7 @@
           headers: {
             "Content-Type": "application/json",
           },
-          body,
+          body: JSON.stringify(body),
         });
       }
 
@@ -90,6 +94,13 @@
       }
 
       function main() {
+        $("#angle").addEventListener("keyup", (event) => {
+          setTimeout(() => {
+            post("/motor/angle", {
+              angle: parseInt(event.target.value),
+            });
+          });
+        });
         document.querySelector("#live").src = API_URL + "/video/stream";
 
         $("[name='video']").addEventListener("click", (event) => {

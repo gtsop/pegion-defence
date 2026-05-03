@@ -4,13 +4,13 @@ import threading
 import time
 
 import cv2
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Body
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, StreamingResponse
 import uvicorn
 
 from pd_node.api import api
-from pd_node.utils import get_base_path
+from pd_node.utils import get_base_path, set_angle
 
 import pd_node.engines as engines
 
@@ -154,6 +154,14 @@ def recorder_videos_video_delete(filename):
     path.unlink()
 
     return { "ok": True }
+
+@app.post("/motor/angle")
+def motor_angle(params = Body(...)):
+    set_angle(params["angle"])
+    return {
+        "ok": True,
+        "angle": params["angle"]
+    }
 
 
 async def stream_frames():
