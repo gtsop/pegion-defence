@@ -97,7 +97,7 @@
         $("#angle").addEventListener("change", (event) => {
           setTimeout(() => {
             post("/motor/angle", {
-              angle: parseInt(event.target.value),
+              angle: parseInt(100 - event.target.value),
             });
           });
         });
