@@ -16,12 +16,12 @@ def thread(state):
             continue
 
         if not cap:
-            print("video_thread: initializing caputre device")
+            log("initializing capture device")
             cap = get_capture()
 
         if not cap.isOpened():
-            print("video_thread: capture failed")
-            clean_up()
+            log("capture failed")
+            clean_up(cap)
             time.sleep(1)
             continue
 
@@ -29,11 +29,15 @@ def thread(state):
         state.video.set_frame(frame.copy())
 
         if not ret:
-            print("Camera stream stopped, exiting...")
-            clean_up()
-            break
+            log("camera stream stopped")
+            clean_up(cap)
+            time.sleep(1)
+            continue
 
-def clean_up():
+def log(msg):
+    print("[video_thread]:", msg)
+
+def clean_up(cap):
     if cap:
         cap.release()
 
