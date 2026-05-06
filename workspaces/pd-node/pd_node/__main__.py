@@ -1,7 +1,6 @@
 from pathlib import Path
 import asyncio
 import threading
-import time
 
 import cv2
 from fastapi import FastAPI, HTTPException, Body

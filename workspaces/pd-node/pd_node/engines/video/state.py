@@ -1,5 +1,3 @@
-import threading
-
 from pd_node.utils.state import BaseState
 
 class State(BaseState):

@@ -4,7 +4,6 @@ import sys
 import time
 
 import cv2
-from linuxpy.video.device import iter_video_capture_devices
 
 def get_base_path():
     if hasattr(sys, "_MEIPASS"):
@@ -21,22 +20,6 @@ def draw_bboxes(frame, boxes, names):
         #    continue
         cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
         cv2.putText(frame, label, (x1, max(20, y1 - 10)), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2, cv2.LINE_AA)
-
-def get_webcams():
-    webcams = []
-
-    for device in iter_video_capture_devices():
-
-        with device:
-            caps = dir(device.info.capabilities)
-
-            if "bcm2835" in str(device.info.card):
-                continue
-
-            if "VIDEO_CAPTURE" in caps or "VIDEO_CAPTURE_MPLANE" in caps:
-                webcams.append(device)
-
-    return webcams
 
 def get_objects(object_name, boxes, names):
     objects = []

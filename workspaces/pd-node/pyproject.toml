@@ -30,4 +30,6 @@ include = ["pd_node*"]
 [dependency-groups]
 dev = [
     "pd-node",
+    "pytest>=9.0.3",
+    "pytest-watcher>=0.6.3",
 ]
