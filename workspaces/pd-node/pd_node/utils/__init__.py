@@ -10,16 +10,6 @@ def get_base_path():
         return Path(sys._MEIPASS).resolve()
     return Path(__file__).parent.parent.resolve()
 
-def draw_bboxes(frame, boxes, names):
-    for box in boxes:
-        x1, y1, x2, y2 = map(int, box.xyxy[0].tolist())
-        conf = float(box.conf[0])
-        cls = int(box.cls[0])
-        label = f"{names[cls]} {conf:.2f}"
-        #if not names[cls] == "bird":
-        #    continue
-        cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        cv2.putText(frame, label, (x1, max(20, y1 - 10)), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2, cv2.LINE_AA)
 
 def get_objects(object_name, boxes, names):
     objects = []
@@ -109,4 +99,122 @@ except Exception as e:
         print(f"Setting angle {angle}")
 
 
+def draw_move_left(frame):
+    _draw_arrows(frame, active="left")
 
+
+def draw_move_right(frame):
+    _draw_arrows(frame, active="right")
+
+
+def draw_move_up(frame):
+    _draw_arrows(frame, active="up")
+
+
+def draw_move_down(frame):
+    _draw_arrows(frame, active="down")
+
+
+def _draw_arrows(frame, active=None):
+    height, width = frame.shape[:2]
+
+    key_size = 24
+    spacing = 8
+
+    # Lower center placement
+    base_x = width // 2
+    base_y = height - 35
+
+    inactive_bg = (40, 40, 40)
+    active_bg = (255, 255, 255)
+
+    inactive_fg = (180, 180, 180)
+    active_fg = (0, 0, 0)
+
+    positions = {
+        "up": (
+            base_x - key_size // 2,
+            base_y - key_size - spacing,
+        ),
+
+        "left": (
+            base_x - key_size - spacing - spacing,
+            base_y,
+        ),
+
+        "down": (
+            base_x - key_size // 2,
+            base_y,
+        ),
+
+        "right": (
+            base_x + key_size // 2 + spacing,
+            base_y,
+        ),
+    }
+
+    for direction, (x, y) in positions.items():
+
+        is_active = direction == active
+
+        bg = active_bg if is_active else inactive_bg
+        fg = active_fg if is_active else inactive_fg
+
+        cv2.rectangle(
+            frame,
+            (x, y),
+            (x + key_size, y + key_size),
+            bg,
+            -1,
+        )
+
+        cv2.rectangle(
+            frame,
+            (x, y),
+            (x + key_size, y + key_size),
+            (120, 120, 120),
+            1,
+        )
+
+        _draw_arrow_icon(
+            frame,
+            direction,
+            x,
+            y,
+            key_size,
+            fg,
+        )
+
+
+def _draw_arrow_icon(frame, direction, x, y, size, color):
+    cx = x + size // 2
+    cy = y + size // 2
+
+    length = 5
+    thickness = 1
+
+    if direction == "left":
+        start = (cx + length, cy)
+        end = (cx - length, cy)
+
+    elif direction == "right":
+        start = (cx - length, cy)
+        end = (cx + length, cy)
+
+    elif direction == "up":
+        start = (cx, cy + length)
+        end = (cx, cy - length)
+
+    else:
+        start = (cx, cy - length)
+        end = (cx, cy + length)
+
+    cv2.arrowedLine(
+        frame,
+        start,
+        end,
+        color,
+        thickness,
+        tipLength=0.45,
+        line_type=cv2.LINE_AA,
+    )

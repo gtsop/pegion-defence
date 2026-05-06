@@ -20,13 +20,16 @@ app.mount("/static", StaticFiles(directory=get_base_path() / "static"), name="st
 
 class AppState:
     def __init__(self):
-        self.video = engines.video.State()
-        self.inference = engines.inference.State()
         self.composer = engines.composer.State()
+        self.inference = engines.inference.State()
+        self.motor = engines.motor.State()
         self.recorder = engines.recorder.State()
+        self.video = engines.video.State()
 
-        self.video.start()
         self.composer.start()
+        self.inference.start()
+        self.motor.start()
+        self.video.start()
 
 app_state = AppState()
 
@@ -156,7 +159,7 @@ def recorder_videos_video_delete(filename):
 
 @app.post("/motor/angle")
 def motor_angle(params = Body(...)):
-    set_angle(params["angle"])
+    app_state.motor.set_target_angle(params["angle"])
     return {
         "ok": True,
         "angle": params["angle"]
@@ -206,6 +209,9 @@ def start_thread():
 
     recorder_thread = threading.Thread(target=engines.recorder.thread, args=(app_state,), daemon=True)
     recorder_thread.start()
+
+    motor_thread = threading.Thread(target=engines.motor.thread, args=(app_state,), daemon=True)
+    motor_thread.start()
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
