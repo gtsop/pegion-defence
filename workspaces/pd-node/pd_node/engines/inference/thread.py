@@ -23,7 +23,7 @@ def thread(state):
             time.sleep(1/15)
             continue
 
-        results = model(frame)[0]
+        results = model(frame, verbose=False)[0]
 
         state.inference.set_results(results)
 
