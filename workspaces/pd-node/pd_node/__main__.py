@@ -21,10 +21,10 @@ app.mount("/static", StaticFiles(directory=get_base_path() / "static"), name="st
 
 class AppState:
     def __init__(self):
-        self.video = engines.VideoState()
-        self.inference = engines.InferenceState()
-        self.composer = engines.ComposerState()
-        self.recorder = engines.RecorderState()
+        self.video = engines.video.State()
+        self.inference = engines.inference.State()
+        self.composer = engines.composer.State()
+        self.recorder = engines.recorder.State()
 
         self.video.start()
         self.composer.start()
