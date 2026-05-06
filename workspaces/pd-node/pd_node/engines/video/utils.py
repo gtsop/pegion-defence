@@ -1,4 +1,6 @@
 import cv2
+import numpy as np
+
 import linuxpy.video.device as video_device
 
 def get_webcams():
@@ -36,3 +38,36 @@ def get_capture():
     return cap
 
 
+def make_no_camera_frame(
+    width=640,
+    height=480,
+    text="No camera feed",
+):
+    frame = np.zeros((height, width, 3), dtype=np.uint8)
+
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    scale = 1
+    thickness = 2
+
+    text_size = cv2.getTextSize(
+        text,
+        font,
+        scale,
+        thickness,
+    )[0]
+
+    text_x = (width - text_size[0]) // 2
+    text_y = (height + text_size[1]) // 2
+
+    cv2.putText(
+        frame,
+        text,
+        (text_x, text_y),
+        font,
+        scale,
+        (255, 255, 255),
+        thickness,
+        cv2.LINE_AA,
+    )
+
+    return frame
