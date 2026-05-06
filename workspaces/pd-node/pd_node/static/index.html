@@ -3,6 +3,14 @@
   <head>
     <title>Pegion Defence</title>
     <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #25343f;
+        color: #bfc9d1;
+        font-family: Arial;
+      }
       #pd-daemon-status-area {
         width: 90%;
         height: 50vh;
@@ -12,10 +20,16 @@
         width: 250px;
       }
     </style>
+    <link rel="stylesheet" type="text/css" href="/static/index.css" />
   </head>
   <body>
     <h1>Pigeon Defence</h1>
     <main>
+      <div id="live__wrapper">
+        <p>Live Feed</p>
+        <img id="live" />
+      </div>
+
       <table>
         <tbody>
           <tr>
@@ -40,9 +54,6 @@
         </tbody>
       </table>
 
-      <div>
-        <img id="live" />
-      </div>
       <div>
         <video controls id="video"></video>
       </div>
