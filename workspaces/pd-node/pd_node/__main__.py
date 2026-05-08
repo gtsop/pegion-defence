@@ -9,7 +9,7 @@ from fastapi.responses import FileResponse, StreamingResponse
 import uvicorn
 
 from pd_node.api import api
-from pd_node.utils import get_base_path, set_angle
+from pd_node.utils import get_base_path 
 
 import pd_node.engines as engines
 
