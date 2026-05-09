@@ -10,8 +10,11 @@ import uvicorn
 
 from pd_node.api import api
 from pd_node.utils import get_base_path 
+from pd_node.db import create_db_and_tables
 
 import pd_node.engines as engines
+
+create_db_and_tables()
 
 app = FastAPI()
 app.include_router(api)
