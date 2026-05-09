@@ -12,6 +12,7 @@ dependencies = [
     "pnnx>=20260409",
     "pyinstaller>=6.20.0",
     "rpi-gpio>=0.7.1",
+    "sqlmodel>=0.0.38",
     "ultralytics>=8.4.45",
     "uvicorn>=0.46.0",
 ]
