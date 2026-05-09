@@ -1,5 +1,5 @@
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 
 from ultralytics import YOLO
 import numpy as np
@@ -37,15 +37,45 @@ def thread(state):
 
         state.inference.set_results(results)
 
-        for box in results.boxes:
-            pass
-            #name = model.names[int(box.cls[0])]
-            #confidence = float(box.conf[0])
-            #record = db.models.ObjectDetection(name=name, confidence=confidence, model="yolo11n")
-            #session.add(record)
-        session.commit()
+        store_detections(results.boxes)
 
         time.sleep(1/15)
+
+live_detections = {}
+def store_detections(boxes):
+    global live_detections
+
+    ids = boxes.id
+    if ids is not None:
+        ids = ids.cpu().numpy().astype(int).tolist()
+    else:
+        ids = []
+
+    live_ids = list(live_detections.keys())
+
+    out_ids = list(set(live_ids) - set(ids))
+    in_ids = list(set(ids) - set(live_ids))
+
+    for id in out_ids:
+        print(live_detections)
+        obj = live_detections[id]
+        record = db.models.ObjectDetection(
+            name=obj['name'],
+            model="yolo11n",
+            detection_start=obj['detection_start'],
+            detection_end=datetime.now(timezone.utc)
+        )
+        session.add(record)
+        del live_detections[id]
+
+    session.commit()
+
+    for box in boxes:
+        if box.id in in_ids:
+            live_detections[int(box.id)] = {
+                "name": model.names[int(box.cls[0])],
+                "detection_start": datetime.now(timezone.utc)
+            }
 
 def log(msg):
     print("[inference_thread]:" + msg)
