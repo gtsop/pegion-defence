@@ -19,18 +19,18 @@ try:
 
     def _servo_move(servo, duty):
         servo.ChangeDutyCycle(duty)
-        time.sleep(0.02)
+        time.sleep(0.04)
         servo.ChangeDutyCycle(0)
 
     def move(direction):
         if direction == "left":
-            _servo_move(h_servo, 7)
+            _servo_move(h_servo, 8)
         elif direction == "right":
-            _servo_move(h_servo, 7.9)
+            _servo_move(h_servo, 7)
         if direction == "up":
-            _servo_move(v_servo, 7)
+            _servo_move(v_servo, 8)
         if direction == "down":
-            _servo_move(v_servo, 7.9)
+            _servo_move(v_servo, 7)
 
     def set_angle(angle: float):
         angle = max(0, min(100, angle))
