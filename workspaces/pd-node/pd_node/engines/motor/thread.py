@@ -4,9 +4,6 @@ from .utils import move
 
 def thread(state):
 
-    # Do initial reset
-    state.motor.set_target_angle(48)
-    
     while True:
         
         if not state.motor.is_running():
