@@ -1,6 +1,6 @@
 import time
 
-from .utils import set_angle
+from .utils import move
 
 def thread(state):
 
@@ -13,12 +13,15 @@ def thread(state):
             log("off")
             time.sleep(1)
 
-        if state.motor.needs_movement():
-            log("moving")
-            set_angle(state.motor.get_target_angle())
-            state.motor.did_move()
-        else:
-            time.sleep(1/10)
+        if state.motor.should_move("right"):
+            move("right")
+        elif state.motor.should_move("left"):
+            move("left")
+        elif state.motor.should_move("up"):
+            move("up")
+        elif state.motor.should_move("down"):
+            move("down")
+        time.sleep(1/10)
 
 
 def log(msg):

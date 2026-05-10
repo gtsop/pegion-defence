@@ -7,29 +7,21 @@ class State(BaseState):
         super().__init__()
         self.angle = 50
         self.target_angle = 50
+        self._move = {
+            "up": False,
+            "down": False,
+            "left": False,
+            "right": False
+        }
             
-    def needs_movement(self):
+    def move(self, direction):
         with self._lock:
-            return self.angle != self.target_angle
+            self._move[direction] = True
 
-    def did_move(self):
+    def freeze(self, direction):
         with self._lock:
-            self.angle = self.target_angle
+            self._move[direction] = False
 
-    def set_target_angle(self, angle):
+    def should_move(self, direction):
         with self._lock:
-            self.target_angle = angle
-
-    def get_target_angle(self):
-        with self._lock:
-            return self.target_angle
-
-    def is_moving_right(self):
-        with self._lock:
-            return self.target_angle < self.angle
-
-    def is_moving_left(self):
-        with self._lock:
-            return self.target_angle > self.angle
-
-
+            return self._move[direction]

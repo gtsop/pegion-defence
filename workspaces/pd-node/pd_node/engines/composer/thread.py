@@ -34,10 +34,14 @@ def thread(state):
         if state.recorder.is_running():
             utils.draw_recording_indicator(frame)
 
-        if state.motor.is_moving_left():
+        if state.motor.should_move("left"):
             utils.draw_move_left(frame)
-        elif state.motor.is_moving_right():
+        elif state.motor.should_move("right"):
             utils.draw_move_right(frame)
+        elif state.motor.should_move("up"):
+            utils.draw_move_up(frame)
+        elif state.motor.should_move("down"):
+            utils.draw_move_down(frame)
 
         state.composer.set_frame(frame)
 

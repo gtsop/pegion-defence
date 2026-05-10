@@ -168,6 +168,22 @@ def motor_angle(params = Body(...)):
         "angle": params["angle"]
     }
 
+@app.post("/motor/move")
+def motor_angle(params = Body(...)):
+    app_state.motor.move(params["direction"])
+    return {
+        "ok": True,
+        "direction": params["direction"]
+    }
+
+@app.post("/motor/freeze")
+def motor_angle(params = Body(...)):
+    app_state.motor.freeze(params["direction"])
+    return {
+        "ok": True,
+        "direction": params["direction"]
+    }
+
 
 async def stream_frames():
     while True:
