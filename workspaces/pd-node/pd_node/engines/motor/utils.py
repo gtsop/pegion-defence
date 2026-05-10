@@ -19,7 +19,7 @@ try:
 
     def _servo_move(servo, duty):
         servo.ChangeDutyCycle(duty)
-        time.sleep(0.04)
+        time.sleep(0.07)
         servo.ChangeDutyCycle(0)
 
     def move(direction):
