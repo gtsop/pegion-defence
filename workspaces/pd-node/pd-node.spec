@@ -1,12 +1,15 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.utils.hooks import collect_all
 
+ncnn_datas, ncnn_binaries, ncnn_hiddenimports = collect_all("ncnn")
+ultra_datas, ultra_binaries, ultra_hiddenimports = collect_all("ultralytics")
 
 a = Analysis(
     ['pd_node/__main__.py'],
     pathex=[],
-    binaries=[],
-    datas=[("pd_node/static", "static"), ("pd_node/models", "models")],
-    hiddenimports=[],
+    binaries=ncnn_binaries + ultra_binaries,
+    datas=ncnn_datas + ultra_datas + [("pd_node/static", "static"), ("pd_node/models", "models")],
+    hiddenimports=ncnn_hiddenimports + ultra_hiddenimports,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

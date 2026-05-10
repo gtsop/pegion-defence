@@ -1437,6 +1437,8 @@ dependencies = [
     { name = "pyinstaller" },
     { name = "rpi-gpio" },
     { name = "sqlmodel" },
+    { name = "torch" },
+    { name = "torchvision" },
     { name = "ultralytics" },
     { name = "uvicorn" },
 ]
@@ -1459,6 +1461,8 @@ requires-dist = [
     { name = "pyinstaller", specifier = ">=6.20.0" },
     { name = "rpi-gpio", specifier = ">=0.7.1" },
     { name = "sqlmodel", specifier = ">=0.0.38" },
+    { name = "torch", specifier = ">=2.11.0" },
+    { name = "torchvision", specifier = ">=0.26.0" },
     { name = "ultralytics", specifier = ">=8.4.45" },
     { name = "uvicorn", specifier = ">=0.46.0" },
 ]
