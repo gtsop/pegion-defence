@@ -57,7 +57,6 @@ def store_detections(boxes):
     in_ids = list(set(ids) - set(live_ids))
 
     for id in out_ids:
-        print(live_detections)
         obj = live_detections[id]
         record = db.models.ObjectDetection(
             name=obj['name'],
