@@ -86,6 +86,14 @@ def engines_status():
         "recorder": app_state.recorder.is_running()
     }
 
+@app.get("/recorder/disk/stats")
+def recorder_disk_stats():
+    stats = app_state.recorder.get_stats()
+    return {
+        "ok": True,
+        "stats": stats
+    }
+
 @app.post("/recorder/start")
 def recorder_start():
     app_state.recorder.start()

@@ -2,6 +2,7 @@ import os
 import time
 
 from .ffmpeg import FFmpegWriter
+from .logger import log
 
 VIDEO_DIR = "/var/lib/pd-node/videos"
 os.makedirs(VIDEO_DIR, exist_ok=True)
@@ -32,3 +33,22 @@ def write_frames(state, writer):
     for frame in frames:
         writer.write(frame)
 
+
+def get_video_dir():
+    return os.environ.get("PD_VIDEO_DIR") or "/var/lib/pd-node/videos"
+
+def init_video_dir():
+    
+    video_dir = get_video_dir()
+
+    # Ensure the directory exists
+    try:
+        os.makedirs(video_dir, exists_ok=True)
+    except PermissionError:
+        log(video_dir, ": Directory does not exist")
+        log(video_dir, ": Process does not have permission to create this directory")
+        
+        
+        
+
+    

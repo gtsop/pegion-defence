@@ -2,6 +2,8 @@ import threading
 
 from pd_node.utils.state import BaseState
 
+from .utils import get_video_disk_stats
+
 class State(BaseState):
     def __init__(self):
         super().__init__()
@@ -16,3 +18,7 @@ class State(BaseState):
             frames = self.stack
             self.stack = []
             return frames
+
+    def get_stats(self):
+        return get_video_disk_stats()
+        
