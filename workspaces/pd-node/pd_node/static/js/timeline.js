@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 const finishTime = new Date();
 let startTime = new Date();
-startTime.setDate(finishTime.getDate() - 2);
+startTime.setDate(finishTime.getDate() - 3);
 
 async function listVideos() {
   const response = await get("/recorder/videos");
@@ -51,9 +51,6 @@ async function renderTimeline() {
     );
 
     const formatted = new Intl.DateTimeFormat("sv-SE", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
@@ -83,4 +80,74 @@ async function renderTimeline() {
     const newSrc = API_URL + "/recorder/videos/" + video.name;
     $("#live").src = newSrc;
   });
+
+  renderDayMarkers();
+}
+
+function timeToOffsetX(time) {
+  const timeline = $("#timeline");
+  const rect = timeline.getBoundingClientRect();
+
+  const timelineWidth = rect.width;
+  const totalSecondsInTimeline = Math.floor(
+    (finishTime.getTime() - startTime.getTime()) / 1000,
+  );
+  const secondsPerPixel = totalSecondsInTimeline / rect.width;
+
+  const pixelsPerSecond = rect.width / totalSecondsInTimeline;
+
+  const seconds = Math.floor((time.getTime() - startTime.getTime()) / 1000);
+
+  return seconds * pixelsPerSecond;
+}
+
+function renderDayMarkers() {
+  const timeline = $("#timeline");
+
+  const today = startOfDay(finishTime);
+
+  let day = finishTime;
+
+  while (renderDayMarker(startOfDay(day))) {
+    day = removeDays(day, 1);
+  }
+}
+
+function renderDayMarker(date) {
+  const offsetX = timeToOffsetX(date);
+
+  if (offsetX < 0) {
+    return false;
+  }
+  const marker = document.createElement("div");
+
+  marker.className = "timeline__marker--day";
+  marker.style.left = offsetX + "px";
+
+  const label = new Intl.DateTimeFormat("sv-SE", {
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+  marker.textContent = label;
+
+  timeline.appendChild(marker);
+
+  return true;
+}
+
+function removeDays(date, days) {
+  const ret = new Date(date);
+  ret.setDate(ret.getDate() - days);
+
+  return ret;
+}
+
+function startOfDay(date) {
+  const ret = new Date(date);
+  ret.setHours(0);
+  ret.setMinutes(-1);
+  ret.setSeconds(0);
+  ret.setMilliseconds(0);
+
+  return ret;
 }

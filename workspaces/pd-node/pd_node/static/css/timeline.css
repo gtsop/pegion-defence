@@ -1,0 +1,34 @@
+#timeline__wrapper {
+  padding: 1rem 3rem;
+}
+
+#timeline {
+  height: 5rem;
+  background-color: #00000055;
+  position: relative;
+}
+
+#timeline__cursor {
+  height: 100%;
+  width: 2px;
+  background-color: red;
+  position: relative;
+}
+
+#timeline__cursor__legend {
+  position: absolute;
+  width: 6rem;
+  top: -1rem;
+  left: -3rem;
+  text-align: center;
+}
+
+.timeline__marker--day {
+  height: 2rem;
+  width: 2px;
+  background-color: gray;
+  position: absolute;
+  bottom: -1rem;
+  display: flex;
+  align-items: end;
+}
