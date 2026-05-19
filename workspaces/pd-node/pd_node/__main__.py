@@ -1,15 +1,13 @@
 from pathlib import Path
-import asyncio
 import threading
 
-import cv2
-from fastapi import FastAPI, HTTPException, Body
+from fastapi import FastAPI, Body
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import FileResponse 
 import uvicorn
 
-from pd_node.api import api
-from pd_node.utils import get_base_path, stream_video
+from pd_node.api import api, app_state
+from pd_node.utils import get_base_path 
 from pd_node.db import create_db_and_tables
 from pd_node.engines.recorder.utils import get_video_dir
 
@@ -21,21 +19,6 @@ app = FastAPI()
 app.include_router(api)
 
 app.mount("/static", StaticFiles(directory=get_base_path() / "static"), name="static")
-
-class AppState:
-    def __init__(self):
-        self.composer = engines.composer.State()
-        self.inference = engines.inference.State()
-        self.motor = engines.motor.State()
-        self.recorder = engines.recorder.State()
-        self.video = engines.video.State()
-
-        self.composer.start()
-        self.inference.start()
-        self.motor.start()
-        self.video.start()
-
-app_state = AppState()
 
 @app.get("/")
 def root():
@@ -50,13 +33,6 @@ def video_start():
 def video_stop():
     app_state.video.stop()
     return { "ok": True }
-
-@app.get("/video/stream")
-async def video_stream():
-    return StreamingResponse(
-        stream_frames(),
-        media_type="multipart/x-mixed-replace; boundary=frame",
-    )
 
 @app.post("/inference/start")
 def inference_start():
@@ -119,51 +95,12 @@ def recorder_videos():
 
         videos.append({
             "name": path.name,
-            "created_at": stat.st_mtime
+            "created_at": int(stat.st_mtime)
         })
 
         videos.sort(key=lambda v: v["created_at"], reverse=True)
 
     return videos
-
-@app.get("/recorder/videos/{filename}")
-def recorder_videos_video(filename):
-    VIDEO_DIR = Path(get_video_dir())
-    path = (VIDEO_DIR / filename).resolve()
-    print("Resolved path", path)
-
-    if VIDEO_DIR not in path.parents:
-        raise HTTPException(status_code=403)
-
-    if not path.exists() or not path.is_file():
-        raise HTTPException(status_code=404)
-
-    if path.suffix.lower() != ".mp4":
-        raise HTTPException(status_code=400)
-
-    return StreamingResponse(
-        stream_video(path),
-        media_type="multipart/x-mixed-replace; boundary=frame"
-    )
-
-@app.delete("/recorder/videos/{filename}")
-def recorder_videos_video_delete(filename):
-    VIDEO_DIR = Path("/var/lib/pd-node/videos")
-    path = (VIDEO_DIR / filename).resolve()
-    print("Resolved path", path)
-
-    if VIDEO_DIR not in path.parents:
-        raise HTTPException(status_code=403)
-
-    if not path.exists() or not path.is_file():
-        raise HTTPException(status_code=404)
-
-    if path.suffix.lower() != ".mp4":
-        raise HTTPException(status_code=400)
-
-    path.unlink()
-
-    return { "ok": True }
 
 @app.post("/motor/angle")
 def motor_angle(params = Body(...)):
@@ -188,36 +125,6 @@ def motor_angle(params = Body(...)):
         "ok": True,
         "direction": params["direction"]
     }
-
-
-async def stream_frames():
-    while True:
-        try:
-            frame = app_state.composer.get_frame()
-
-            if frame is None:
-                await asyncio.sleep(1/15)
-                continue
-
-            ok, buffer = cv2.imencode(".jpg", frame)
-
-            if not ok:
-                await asyncio.sleep(1/15)
-                continue
-
-            yield (
-                b"--frame\r\n"
-                b"Content-Type: image/jpeg\r\n\r\n" + buffer.tobytes() + b"\r\n"
-            )
-
-            await asyncio.sleep(1/15)
-
-        except asyncio.CancelledError:
-            print("stream disconnected")
-            raise
-        except FileNotFoundError:
-            pass
-
 
 
 @app.on_event("startup")

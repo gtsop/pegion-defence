@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 const finishTime = new Date();
 let startTime = new Date();
-startTime.setDate(finishTime.getDate() - 3);
 
 async function listVideos() {
   const response = await get("/recorder/videos");
@@ -19,10 +18,6 @@ async function listVideos() {
 
 function findVideoContainingTimestamp(videos, time) {
   return videos.find((video) => {
-    console.log(
-      Math.floor(video.created_at),
-      Math.floor(time.getTime() / 1000),
-    );
     return Math.floor(video.created_at) <= Math.floor(time.getTime() / 1000);
   });
 }
@@ -33,6 +28,9 @@ async function renderTimeline() {
   const cursorLegend = $("#timeline__cursor__legend");
 
   const videos = await listVideos();
+  startTime = new Date(videos[videos.length - 1].created_at * 1000);
+
+  videos.forEach(renderVideoMarker);
 
   timeline.addEventListener("mousemove", function (e) {
     const rect = timeline.getBoundingClientRect();
@@ -75,9 +73,11 @@ async function renderTimeline() {
       startTime.getTime() + left * secondsPerPixel * 1000,
     );
 
-    const video = findVideoContainingTimestamp(videos, cursorTime);
+    //const video = findVideoContainingTimestamp(videos, cursorTime);
 
-    const newSrc = API_URL + "/recorder/videos/" + video.name;
+    //const newSrc = API_URL + "/recorder/videos/" + video.name;
+    const newSrc =
+      API_URL + "/api/stream/playback/" + Math.floor(cursorTime / 1000);
     $("#live").src = newSrc;
   });
 
@@ -119,8 +119,8 @@ function renderDayMarker(date) {
   if (offsetX < 0) {
     return false;
   }
-  const marker = document.createElement("div");
 
+  const marker = document.createElement("div");
   marker.className = "timeline__marker--day";
   marker.style.left = offsetX + "px";
 
@@ -145,9 +145,25 @@ function removeDays(date, days) {
 function startOfDay(date) {
   const ret = new Date(date);
   ret.setHours(0);
-  ret.setMinutes(-1);
+  ret.setMinutes(0);
   ret.setSeconds(0);
   ret.setMilliseconds(0);
 
   return ret;
+}
+
+function renderVideoMarker(video) {
+  const date = new Date(video.created_at * 1000);
+  const offsetX = timeToOffsetX(date);
+
+  if (offsetX < 0) {
+    return;
+  }
+
+  const timeline = $("#timeline");
+
+  const marker = document.createElement("div");
+  marker.className = "timeline__marker timeline__marker--video";
+  marker.style.left = offsetX + "px";
+  timeline.appendChild(marker);
 }

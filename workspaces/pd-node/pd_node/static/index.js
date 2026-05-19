@@ -34,7 +34,7 @@ function main() {
       });
     });
   });
-  document.querySelector("#live").src = API_URL + "/video/stream";
+  document.querySelector("#live").src = API_URL + "/api/stream/live";
 
   $("[name='video']").addEventListener("click", (event) => {
     const verb = Boolean(event.target.checked) ? "start" : "stop";
@@ -60,7 +60,7 @@ function main() {
   });
 
   $("#video-live").addEventListener("click", () => {
-    $("#live").src = API_URL + "/video/stream";
+    $("#live").src = API_URL + "/api/stream/live";
   });
   $("#video-live-stop").addEventListener("click", () => {
     $("#live").src = "";
